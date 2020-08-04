@@ -1,21 +1,18 @@
 .container {
-  max-width: 1170px;
+  max-width: 1110px;
   margin: 0px auto;
   padding: 0px 15px;
 }
-
-@media (max-width: 1185px) {
+@media (max-width: 1125px) {
   .container {
     max-width: 970px;
   }
 }
-
 @media (max-width: 992px) {
   .container {
     max-width: 750px;
   }
 }
-
 @media (max-width: 768px) {
   .container {
     max-width: none;
@@ -30,7 +27,6 @@
 }
 
 *, *:before, *:after {
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -97,9 +93,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 header {
-  background-color: #000;
+  background-color: rgba(148, 35, 35, 0.63);
 }
-
 header body {
   font-size: 20px;
 }
+
+.ground {
+  width: 600px;
+  height: 800px;
+  border: 2px solid #000;
+  background: rgba(139, 139, 139, 0.301);
+  margin: 40px auto;
+}
+/*# sourceMappingURL=style.css.map */
