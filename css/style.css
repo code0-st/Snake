@@ -100,10 +100,8 @@ header body {
 }
 
 .ground {
-  width: 600px;
-  height: 800px;
   border: 2px solid #000;
-  background: rgba(139, 139, 139, 0.301);
-  margin: 40px auto;
+  background-color: #f1f1f1;
+  margin: 20px auto;
 }
 /*# sourceMappingURL=style.css.map */
