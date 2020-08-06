@@ -1,10 +1,10 @@
 'use strict'
 
 const canvas = document.querySelector('.ground'),
-ctx = canvas.getContext("2d");
+    ctx = canvas.getContext("2d");
 
-const grid = 30;
-const FPS = 20;
+const grid = 20;
+const FPS = 30;
 
 const player = {
     dx: 0,
@@ -13,7 +13,12 @@ const player = {
     currentY: (canvas.clientHeight - grid) / 2,
 
     tail: [],
-    tailLength: 80
+    tailLength: 3
+};
+
+const fruit = {
+    fruitX: (canvas.clientWidth - grid) / 2,
+    fruitY: (canvas.clientHeight - grid) / 2 -50
 };
 
 const Start = () => {
@@ -33,15 +38,45 @@ const DrawBegin = () => {
 const Draw = () => {
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight); // Очистка поля
     move();
+    if (player.tailLength === 3) {
+        ctx.fillRect(fruit.fruitX, fruit.fruitY, grid, grid);
+    }
+    drawFruit();
+    console.log(`FruitX: ${fruit.fruitX}, FruitY: ${fruit.fruitY}`);
 };
 
 const teleport = () => {
-    player.currentX = player.currentX < 0 ? canvas.clientWidth : player.currentX > canvas.clientWidth ? -grid : player.currentX;
-    player.currentY = player.currentY < 0 ? canvas.clientHeight : player.currentY > canvas.clientHeight ? -grid : player.currentY;
+    if (player.currentX < 0 && player.dx === -grid) {
+        player.currentX = canvas.clientWidth;
+    } else if (player.currentX > canvas.clientWidth - grid && player.dx === grid) {
+        player.currentX = -grid;
+    }
+
+    if (player.currentY < 0 && player.dy === -grid) {
+        player.currentY = canvas.clientHeight;
+    } else if (player.currentY > canvas.clientHeight - grid && player.dy === grid) {
+        player.currentY = -grid;
+    }
+
+    if (player.currentX === - grid && player.dx === 0) {
+        player.currentX = 0;
+    }
+
+    if (player.currentX === canvas.clientWidth && player.dx === 0) {
+        player.currentX = canvas.clientWidth - grid;
+    }
+
+    if (player.currentY === -grid && player.dy === 0) {
+        player.currentY = 0;
+    }
+
+    if (player.currentY === canvas.clientHeight && player.dy === 0) {
+        player.currentY = 0;
+    }
 };
 
 const move = () => {
-      
+
     player.currentX += player.dx;
     player.currentY += player.dy;
 
@@ -55,21 +90,19 @@ const move = () => {
     }
 
     player.tail.forEach((cell, i) => {
-        ctx.fillStyle = `rgb(${24+i*3}, ${36+i*10}, ${151+i*5})`;
-        ctx.fillRect(cell.x, cell.y, grid, grid);
-        console.log(`PlayerX: ${player.currentX}, PlayerY: ${player.currentY}
-            CellX: ${cell.x}, CellY: ${cell.y}
-            DX: ${player.currentX - cell.x}, DY: ${player.currentY - cell.y}`);
+        ctx.fillStyle = `rgb(${0 + i * 3}, ${15 + i * 10}, ${100 + i * 5})`;
+        ctx.fillRect(cell.x, cell.y, grid-1, grid-1);
+        eatFruit(cell.x, cell.y)
     });
 };
 
 
 const changeDirection = key => {
-    switch(key) {
-        case 'KeyW': player.dx = 0; player.dy = -grid; 
+    switch (key) {
+        case 'KeyW': player.dx = 0; player.dy = -grid;
             //ctx.fillRect(currentX, currentY += velocity*directionY, 50, 50);
             break;
-        case 'KeyS': player.dx = 0; player.dy = grid; 
+        case 'KeyS': player.dx = 0; player.dy = grid;
             //ctx.fillRect(currentX, currentY += velocity*directionY, 50, 50);
             break;
         case 'KeyA': player.dx = -grid; player.dy = 0;
@@ -78,7 +111,27 @@ const changeDirection = key => {
         case 'KeyD': player.dx = grid; player.dy = 0;
             //ctx.fillRect(currentX += velocity*directionX, currentY, 50, 50);
             break;
-    }  
+    }
+};
+
+const getRandomInt = (min, max) =>{
+  return Math.floor(Math.random() * (max - min)) + min;
+};
+
+const eatFruit = (x, y) => {
+    if (x === fruit.fruitX && y === fruit.fruitY) {
+        player.tailLength++;
+        
+        fruit.fruitX = getRandomInt(0, canvas.clientWidth / grid) * grid;
+        fruit.fruitY = getRandomInt(0, canvas.clientHeight / grid) * grid;
+    }
+
+    console.log(fruit.fruitX, fruit.fruitY);
+};
+
+const drawFruit = () => {
+    ctx.fillStyle = 'rgb(163, 226, 55)';
+    ctx.fillRect(fruit.fruitX, fruit.fruitY, grid, grid);
 }
 
 document.addEventListener('load', Start());
