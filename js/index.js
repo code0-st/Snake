@@ -1,10 +1,16 @@
 'use strict'
 
 const canvas = document.querySelector('.ground'),
-    ctx = canvas.getContext("2d");
+    ctx = canvas.getContext("2d"),
+    currentScore = document.querySelector('.info__current-score'),
+    bestScore = document.querySelector('.info__best-score'),
+    playButton = document.querySelector('.play__button'),
+    mainMenu = document.querySelector('.play__menu');
 
 const grid = 20;
 const FPS = 30;
+let playerCurrentScore = 0;
+let playerBestScore = 0;
 
 const player = {
     dx: 0,
@@ -22,8 +28,10 @@ const fruit = {
 };
 
 const Start = () => {
-    DrawBegin();
-    setInterval(Update, 1000 / FPS);
+    if (playButton.classList.contains('inplay')) {
+        DrawBegin();
+        setInterval(Update, 1000 / FPS);
+    } 
 };
 
 const Update = () => {
@@ -92,7 +100,7 @@ const move = () => {
     player.tail.forEach((cell, i) => {
         ctx.fillStyle = `rgb(${0 + i * 3}, ${15 + i * 10}, ${100 + i * 5})`;
         ctx.fillRect(cell.x, cell.y, grid-1, grid-1);
-        eatFruit(cell.x, cell.y)
+        eatFruit(cell.x, cell.y);
     });
 };
 
@@ -121,6 +129,8 @@ const getRandomInt = (min, max) =>{
 const eatFruit = (x, y) => {
     if (x === fruit.fruitX && y === fruit.fruitY) {
         player.tailLength++;
+        playerCurrentScore += 10;
+        currentScore.textContent = `Текущий счёт: ${playerCurrentScore}`;
         
         fruit.fruitX = getRandomInt(0, canvas.clientWidth / grid) * grid;
         fruit.fruitY = getRandomInt(0, canvas.clientHeight / grid) * grid;
@@ -134,11 +144,15 @@ const drawFruit = () => {
     ctx.fillRect(fruit.fruitX, fruit.fruitY, grid, grid);
 }
 
-document.addEventListener('load', Start());
-
 document.addEventListener('keydown', e => {
     console.log(e.code);
     changeDirection(e.code);
-})
+});
 
+playButton.addEventListener('click', () => {
+    playButton.classList.add('inplay');
+    mainMenu.classList.add('inplay');
+
+    Start();
+});
 

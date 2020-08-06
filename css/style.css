@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 .container {
   max-width: 1110px;
   margin: 0px auto;
@@ -48,14 +49,14 @@ html, body {
   font-size: 100%;
   line-height: 1;
   font-size: 14px;
-  font-family: "";
+  font-family: "Press Start 2P", cursive;
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
 
 input, button, textarea {
-  font-family: "";
+  font-family: "Press Start 2P", cursive;
 }
 
 input::-ms-clear {
@@ -103,5 +104,46 @@ header body {
   border: 2px solid #000;
   background-color: #f1f1f1;
   margin: 20px auto;
+}
+
+.info {
+  margin: 20px auto;
+  display: flex;
+}
+.info__current-score {
+  font-size: 30px;
+  margin-right: 50px;
+}
+.info__best-score {
+  font-size: 30px;
+}
+
+.play {
+  position: relative;
+}
+.play__menu {
+  opacity: 1;
+  background-color: rgba(61, 102, 14, 0.9);
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 810px;
+  height: 810px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.play__menu.inplay {
+  transition: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  top: -120%;
+  opacity: 0;
+}
+.play__button {
+  color: #fff;
+  font-size: 30px;
+  padding: 30px;
+  border: 3px solid #fff;
+  border-radius: 20px;
+  cursor: pointer;
 }
 /*# sourceMappingURL=style.css.map */
