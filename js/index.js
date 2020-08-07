@@ -5,12 +5,16 @@ const canvas = document.querySelector('.ground'),
     currentScore = document.querySelector('.info__current-score'),
     bestScore = document.querySelector('.info__best-score'),
     playButton = document.querySelector('.play__button'),
-    mainMenu = document.querySelector('.play__menu');
+    mainMenu = document.querySelector('.play__menu'),
+    loseMenu = document.querySelector('.lose'),
+    playAgainButton = document.querySelector('.lose__button'),
+    finallyScore = document.querySelector('.lose__title');
 
 const grid = 20;
 const FPS = 30;
 let playerCurrentScore = 0;
 let playerBestScore = 0;
+let interval;
 
 const player = {
     dx: 0,
@@ -24,33 +28,44 @@ const player = {
 
 const fruit = {
     fruitX: (canvas.clientWidth - grid) / 2,
-    fruitY: (canvas.clientHeight - grid) / 2 -50
+    fruitY: (canvas.clientHeight - grid) / 2 - 100
 };
 
 const Start = () => {
-    if (playButton.classList.contains('inplay')) {
+    if (playButton.classList.contains('inplay') && !loseMenu.classList.contains('inlose')) {
+        console.log("Start");
         DrawBegin();
-        setInterval(Update, 1000 / FPS);
-    } 
+        interval = setInterval(Update, 1000 / FPS);
+    } else {
+        console.log("Stop");
+        DrawBegin();
+        clearInterval(interval);
+    }
 };
 
-const Update = () => {
+function Update(){
     Draw();
     teleport();
 };
 
 const DrawBegin = () => {
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+    currentScore.textContent = `Текущий счёт: ${playerCurrentScore}`;
+    player.dx = 0,
+    player.dy = -grid,
+    player.currentX = (canvas.clientWidth - grid) / 2,
+    player.currentY = (canvas.clientHeight - grid) / 2,
+
+    player.tail = [],
+    player.tailLength = 3
 };
 
 const Draw = () => {
-    ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight); // Очистка поля
-    move();
+    ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight); 
     if (player.tailLength === 3) {
         ctx.fillRect(fruit.fruitX, fruit.fruitY, grid, grid);
     }
-    drawFruit();
-    console.log(`FruitX: ${fruit.fruitX}, FruitY: ${fruit.fruitY}`);
+    move();
 };
 
 const teleport = () => {
@@ -101,9 +116,26 @@ const move = () => {
         ctx.fillStyle = `rgb(${0 + i * 3}, ${15 + i * 10}, ${100 + i * 5})`;
         ctx.fillRect(cell.x, cell.y, grid-1, grid-1);
         eatFruit(cell.x, cell.y);
+        crash(cell.x, cell.y, i);
     });
 };
 
+const crash = (x, y, index) => {
+    for (let i = index + 1; i < player.tailLength; i++) {
+        if (player.tail[i].x === x && player.tail[i].y === y) {
+            console.log(x);
+            loseMenu.classList.add('inlose');
+            playButton.classList.remove('inplay');
+            finallyScore.textContent = `Ваш счёт: ${playerCurrentScore}`;
+            if (playerCurrentScore > playerBestScore) {
+                playerBestScore = playerCurrentScore;
+            }
+            bestScore.textContent = `Ваш рекорд: ${playerBestScore}`;
+            playerCurrentScore = 0;
+            Start();
+        }
+    }
+};
 
 const changeDirection = key => {
     switch (key) {
@@ -136,7 +168,7 @@ const eatFruit = (x, y) => {
         fruit.fruitY = getRandomInt(0, canvas.clientHeight / grid) * grid;
     }
 
-    console.log(fruit.fruitX, fruit.fruitY);
+    drawFruit();
 };
 
 const drawFruit = () => {
@@ -149,9 +181,27 @@ document.addEventListener('keydown', e => {
     changeDirection(e.code);
 });
 
+document.addEventListener('load', () => {
+    playerCurrentScore = 0;
+    playerBestScore = 0;
+
+    playButton.classList.remove('inplay');
+    mainMenu.classList.add('inplay');
+    loseMenu.classList.remove('inlose');
+
+    Start();
+})
+
 playButton.addEventListener('click', () => {
     playButton.classList.add('inplay');
     mainMenu.classList.add('inplay');
+
+    Start();
+});
+
+playAgainButton.addEventListener('click', () => {
+    playButton.classList.add('inplay');
+    loseMenu.classList.remove('inlose');
 
     Start();
 });

@@ -1,4 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .container {
   max-width: 1110px;
   margin: 0px auto;
@@ -101,9 +107,9 @@ header body {
 }
 
 .ground {
-  border: 2px solid #000;
-  background-color: #f1f1f1;
-  margin: 20px auto;
+  border: 1px solid #000;
+  background-color: #f9f9f9;
+  margin: auto;
 }
 
 .info {
@@ -120,15 +126,17 @@ header body {
 
 .play {
   position: relative;
+  margin: auto;
+  max-width: 802px;
 }
 .play__menu {
   opacity: 1;
   background-color: rgba(61, 102, 14, 0.9);
   position: absolute;
-  top: 20px;
+  top: 0;
   left: 0;
-  width: 810px;
-  height: 810px;
+  width: 802px;
+  height: 802px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -139,6 +147,37 @@ header body {
   opacity: 0;
 }
 .play__button {
+  color: #fff;
+  font-size: 30px;
+  padding: 30px;
+  border: 3px solid #fff;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.lose {
+  top: -200%;
+  display: none;
+}
+.lose.inlose {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 802px;
+  height: 802px;
+  background-color: rgba(0, 40, 10, 0.7);
+}
+.lose__title {
+  color: #fff;
+  text-align: center;
+  font-size: 40px;
+  letter-spacing: 10px;
+  margin: 100px 0;
+}
+.lose__button {
   color: #fff;
   font-size: 30px;
   padding: 30px;
